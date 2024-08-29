@@ -1,6 +1,14 @@
-# Getting Started with Create React App
+## My Task
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Это финальный проект на свободную тему.
+
+Для него я устанавливала:
+
+npm install antd --save
+
+npm install react-router-dom
+
+Если проэкт не запускается командой npm start то попробуй сначала написать cd my-app а потом npm start.
 
 ## Available Scripts
 
