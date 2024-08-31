@@ -30,9 +30,17 @@ const SignUpModal = ({ visible, onCancel, onFinish }) => {
           name="phone"
           rules={[
             { required: true, message: "Please input your phone number!" },
+            {
+              pattern: /^\d{12}$/,
+              message: "Phone number must be exactly 12 digits!",
+            },
+            {
+              pattern: /^\d+$/,
+              message: "Phone number can only contain digits!",
+            },
           ]}
         >
-          <Input placeholder="Phone Number" />
+          <Input placeholder="Phone Number" maxLength={12} />
         </Form.Item>
 
         <Form.Item>

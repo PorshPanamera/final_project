@@ -273,7 +273,7 @@ const App = () => {
       <style>
         {`
           @media (min-width: 600px) {
-            .custom-content, .custom-content div {
+            .custom-content {
               text-align: center;
               margin: 0 auto
             }
