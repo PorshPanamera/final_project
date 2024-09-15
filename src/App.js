@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {
   Layout,
   Menu,
-  Input,
+  AutoComplete,
   Button,
   Progress,
   Spin,
@@ -14,6 +14,7 @@ import SignUpModal from "./components/SingUpModal";
 import WeatherData from "./components/Weather";
 import Contacts from "./components/Contacts";
 import AboutUs from "./components/AboutUs";
+import Cookies from "js-cookie";
 
 const { Header, Content, Footer } = Layout;
 
@@ -21,6 +22,14 @@ const items1 = [
   { key: "Sign up", label: "Sign up" },
   { key: "Contacts", label: "Contacts" },
   { key: "About us", label: "About us" },
+];
+
+const cityOptions = [
+  { value: "Kyiv" },
+  { value: "Washington" },
+  { value: "Tokyo" },
+  { value: "Berlin" },
+  { value: "Paris" },
 ];
 
 const App = () => {
@@ -32,8 +41,8 @@ const App = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [theme, setTheme] = useState("dark");
 
-  const handleInputChange = (e) => {
-    setInputCity(e.target.value);
+  const handleInputChange = (value) => {
+    setInputCity(value);
   };
 
   const handleButtonClick = () => {
@@ -52,9 +61,19 @@ const App = () => {
   };
 
   const handleFinish = (values) => {
-    console.log("Received values of form: ", values);
+    localStorage.setItem("formData", JSON.stringify(values));
+    Cookies.set("formDataExpiry", true, { expires: 14 });
     setIsModalVisible(false);
   };
+
+  const checkLocalStorageExpiry = () => {
+    const expiryCookie = Cookies.get("formDataExpiry");
+
+    if (!expiryCookie) {
+      localStorage.removeItem("formData");
+    }
+  };
+  checkLocalStorageExpiry();
 
   const toggleTheme = (checked) => {
     setTheme(checked ? "dark" : "light");
@@ -131,12 +150,19 @@ const App = () => {
                   <>
                     <h2 style={{ color: textColor }}>Check the Weather</h2>
                     <div style={{ marginBottom: 20, display: "flex", gap: 10 }}>
-                      <Input
-                        placeholder="Enter city name"
+                      <AutoComplete
+                        options={cityOptions}
                         value={inputCity}
                         onChange={handleInputChange}
+                        onKeyPress={(e) => {
+                          if (e.key === "Enter") {
+                            handleButtonClick();
+                          }
+                        }}
+                        placeholder="Enter city name"
                         style={{ width: 200 }}
                       />
+
                       <Button type="primary" onClick={handleButtonClick}>
                         Get Weather
                       </Button>
@@ -173,9 +199,6 @@ const App = () => {
                               <p style={{ color: textColor }}>
                                 Description:{" "}
                                 {weatherData.weather[0].description}
-                              </p>
-                              <p style={{ color: textColor }}>
-                                Humidity: {weatherData.main.humidity}%
                               </p>
                               <p style={{ color: textColor }}>
                                 Wind Speed: {weatherData.wind.speed} m/s

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 const WeatherData = ({ city, onWeatherData, onLoading, onError }) => {
   useEffect(() => {
@@ -15,7 +15,6 @@ const WeatherData = ({ city, onWeatherData, onLoading, onError }) => {
         }
 
         const data = await response.json();
-        console.log(data);
 
         if (!data.main || !data.weather || !data.wind) {
           throw new Error("Incomplete data received from API");
